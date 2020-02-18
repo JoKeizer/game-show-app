@@ -14,7 +14,18 @@
 // button and onscreen keyboard buttons.
 
 // const phrase = new Phrase();
-const game = new Game();
+let game;
+
+const start = document.getElementById('btn__reset');
+
+start.addEventListener('click', function() {
+    game = new Game();
+    game.startGame();
+
+});
+
+
+// const game = new Game();
 
 // console.log(`Phrase - phrase: ${phrase.phrase}`);
 
@@ -35,3 +46,5 @@ const game = new Game();
 const randomPhrase = game.getRandomPhrase();
 const phrase = new Phrase(randomPhrase);
 phrase.addPhraseToDisplay();
+//
+// game.startGame();

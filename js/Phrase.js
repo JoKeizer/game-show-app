@@ -22,6 +22,7 @@ class Phrase {
      * Display phrase on game board
      */
     addPhraseToDisplay() {
+        console.log("addPhraseToDisplay running");
 
         const board = document.getElementById('phrase');
         const letters = [...this.phrase];
@@ -39,7 +40,6 @@ class Phrase {
 
             board.firstElementChild.appendChild(li)
         })
-
     };
 }
 

@@ -7,11 +7,14 @@
 // interactions, getting a random phrase, checking for a win, and removing a life from the
 // scoreboard.
 
+
 class Game {
     constructor() {
         this.missed = 0;
         this.phrases = this.createPhrases();
-        this.activePhrase = ''
+        this.activePhrase = '';
+        this.phrase = this.createPhrase();
+
     }
 
     /**
@@ -37,6 +40,24 @@ class Game {
         let number = Math.floor(Math.random() * Math.floor(this.phrases.length));
         return this.phrases[number];
     }
-}
 
+    // Create a new instance of the Phrase class
+    createPhrase() {
+
+        // Get a random phrase
+        const randomPhrase = this.getRandomPhrase();
+
+        // Create a new instance of the Phrase class
+        return new Phrase(randomPhrase);
+    }
+
+    startGame() {
+        //Hide overlay
+        document.getElementById("overlay").style.display = "none";
+
+        console.log("running")
+        // Add the random phrase to the board
+        this.phrase.addPhraseToDisplay();
+    }
+}
 
