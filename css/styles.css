@@ -60,6 +60,10 @@ button {
   cursor: pointer;
 }
 
+.hidden {
+  display: none;
+}
+
 #btn__reset {
 	width: 200px;
 	margin: 0 auto;
@@ -99,7 +103,7 @@ button {
   padding: 20px 1px 0 1px;
   margin-right: 2px;
   color: transparent;
-  background: var(--color-neutral-light);
+  background: black;
   border-radius: 5px;
 }
 
@@ -110,8 +114,8 @@ button {
 
 
 .show {
-  color: #fff;
-  background-color: #4ac0d5;
+  background-color: white;
+  color: black;
   font-size: 20px;
   height: 65px;
   width: 65px;
@@ -180,7 +184,28 @@ button {
 }
 
 .start {
-  background-color: #3a3f58;
+  background-image:  url('../images/bg.jpg');
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: center;
+  background-size: cover;
+  background-color: black;
+}
+
+body::after {
+  content: "";
+  opacity: 0.5;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  position: absolute;
+  z-index: -1;
+  background-image:  url('../images/bg.jpg');
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: center;
+  background-size: cover;
 }
 
 .start a {
@@ -188,7 +213,12 @@ button {
 }
 
 .win {
-  background-color: var(--color-win);
+  background-image:  url('../images/win.jpg');
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: center;
+  background-size: cover;
+  background-color: black;
 }
 
 .win a {
@@ -196,9 +226,20 @@ button {
 }
 
 .lose {
-  background-color: #f5785f;
+  background-image:  url('../images/lose.jpg');
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: center;
+  background-size: cover;
+  background-color: black;
 }
 
 .lose a {
   color: var(--color-lose);
+}
+
+.key:disabled {
+  color: black;
+  background-color: transparent;
+  border: 2px solid black;
 }

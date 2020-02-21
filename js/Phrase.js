@@ -2,17 +2,6 @@
  * Project 4 - OOP Game App
  * Phrase.js */
 
-
-// Phrase.js to create a Phrase class to handle the creation of phrases.
-
-// This method adds letter placeholders to the display when the game starts. Each letter is
-// presented by an empty box, one list item for each letter. See the example_phrase_html.txt file
-// for an example of what the render HTML for a phrase should look like when the game starts,
-//     including any `id` or `class` attributes needed. When the player correctly guesses a letter, the
-// empty box is replaced with the matched letter (see the `showMatchedLetter()` method below).
-// Make sure the phrase displayed on the screen uses the `letter` CSS class for letters and the
-//     `space` CSS class for space.
-
 class Phrase {
     constructor(phrase) {
         this.phrase = phrase;
@@ -30,7 +19,7 @@ class Phrase {
         letters.forEach(letter => {
             const li = document.createElement('li');
 
-            if(letter === ' ') {
+            if (letter === ' ') {
                 li.className = 'hide space';
 
             } else {
@@ -39,8 +28,55 @@ class Phrase {
             }
 
             board.firstElementChild.appendChild(li)
-        })
-    };
+        });
+    }
+
+    checkLetter(event) {
+        let letter;
+        if (event.type === 'click') {
+            letter = event.target.textContent;
+        } else if (event.type === 'keypress') {
+            letter = event.key
+        }
+
+        // Spread the phrase into individual characters
+        const characters = [...this.phrase];
+
+        const indexes = characters.reduce((indexes, char, i) => {
+            if (char === letter) {
+                indexes.push(i);
+            }
+            return indexes;
+        }, []);
+
+        return {
+            match: indexes.length > 0,
+            indexes: indexes
+        }
+    }
+
+    showMatchedLetter(event) {
+
+        // Matching indexes array from the checkLetter() method
+        const indexes = this.checkLetter(event).indexes;
+
+        // An array of the characters from the board
+        const boardChars = Array.from(document.getElementById('phrase').firstElementChild.children);
+
+        // Loops over each character element from the board
+        boardChars.forEach((char, i) => {
+
+            // Loops over the matching indexes array
+            indexes.forEach(index => {
+
+                // If the matching index is the same as the character index, then change the class name to 'show letter'
+                if (index === i) {
+                    char.classList = 'show letter';
+                }
+            });
+        });
+    }
+
 }
 
 

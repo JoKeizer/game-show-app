@@ -2,49 +2,96 @@
  * Project 4 - OOP Game App
  * app.js */
 
-// The player’s goal is to guess all the letters in a hidden, random phrase. At the beginning, the player only sees the number of letters and words in the phrase, represented by blank boxes on the screen.
-// The player clicks an onscreen keyboard to guess letters in the phrase.
-// The letter is disabled on the onscreen keyboard and a player can't select that letter again.
-// If the selected letter is in the phrase at least once, the letter and its position in the phrase is highlighted on screen. All instances of the letter are made visible (so if there are 3 A's, all of the A's in the phrase appear at once).
-// If the selected letter is not in the phrase, one of the player's hearts in the scoreboard is changed from a "live" heart to a "lost" heart.
-// The player keeps choosing letters until they reveal all the letters in the phrase, or they make five incorrect guesses.
 
-
-// app.js to create a new instance of the `Game` class and add event listeners for the start
-// button and onscreen keyboard buttons.
-
-// const phrase = new Phrase();
 let game;
-
+let pressedKeys = [];
 const start = document.getElementById('btn__reset');
+const keyBoardBtns = document.getElementById('qwerty');
 
-start.addEventListener('click', function() {
-    game = new Game();
-    game.startGame();
+//reset game
+function resetDisplay() {
 
+    //clear message
+    const msg = document.getElementById('game-over-message');
+    msg.textContent = '';
+
+
+    //clear board
+    const board = document.getElementById('phrase');
+    const listItems = Array.from(document.querySelector('#phrase ul').childNodes);
+
+    if(listItems.length > 0) {
+        listItems.forEach(listItem => board.firstElementChild.removeChild(listItem));
+    }
+
+    //enable keys
+    const keys = Array.from(document.querySelectorAll('.key'));
+    keys.forEach(key => key.disabled = false);
+
+    //reset hears
+    const hiddenLifes = Array.from(document.querySelectorAll('.hidden'));
+    hiddenLifes.forEach(heart => heart.className = 'tries');
+
+    //reset the keys in the pressedKeys to empty array
+    pressedKeys = [];
+
+    //hide start screen
+    const overlay = document.getElementById('overlay');
+    overlay.style.display = 'none'
+}
+
+
+function markButton(event) {
+    if(event.type === 'click') {
+        event.target.disabled = true;
+        game.handleInteraction(event);
+    }
+
+    // If a key is pressed
+    else if(event.type === 'keypress') {
+        //All letters on keyboard
+        const keysOnBoard = Array.from(document.querySelectorAll('.key'));
+        //if key key is the same disabled key
+        keysOnBoard.forEach(key => {
+            if (event.key === key.innerText) {
+                key.disabled = true;
+            }
+        });
+        //save all pressed keys in an array pressedKeys
+        pressedKeys.push(event.key);
+        const previousKeys = pressedKeys.slice(0, pressedKeys.length - 1);
+
+        //check if player pressed a previousKeys
+        if(previousKeys.indexOf(event.key) > -1) {
+            event.preventDefault();
+            return false;
+        } else {
+            game.handleInteraction(event);
+        }
+    }
+
+}
+
+// When a keyboard button is clicked
+keyBoardBtns.addEventListener('click', function() {
+    // If a button is clicked, call the markButton() function
+    if (event.target.tagName === 'BUTTON') {
+        markButton(event);
+    }
 });
 
+//when a key from the keyboard is pressed
+document.addEventListener('keypress', function(event) {
+    // letter only
+    const filter = /[a-zA-Z]+/;
+    if (filter.test(event.key) && event.key !== 'Enter') {
+        markButton(event);
+    }
+});
 
-// const game = new Game();
-
-// console.log(`Phrase - phrase: ${phrase.phrase}`);
-
-// game.phrases.forEach((phrase, index) => {
-//     console.log(`Phrase ${index} - phrase: ${phrase}`);
-// });
-
-// const logPhrase = (phrase) => {
-//     console.log(`Phrase - phrase: `, phrase);
-// };
-//
-// logPhrase(game.getRandomPhrase());
-// logPhrase(game.getRandomPhrase());
-// logPhrase(game.getRandomPhrase());
-// logPhrase(game.getRandomPhrase());
-// logPhrase(game.getRandomPhrase());
-
-const randomPhrase = game.getRandomPhrase();
-const phrase = new Phrase(randomPhrase);
-phrase.addPhraseToDisplay();
-//
-// game.startGame();
+//start Game on button click
+start.addEventListener('click', function() {
+    resetDisplay();
+    game = new Game();
+    game.startGame();
+});
