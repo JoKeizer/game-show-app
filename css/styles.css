@@ -142,8 +142,9 @@ button {
 }
 
 .wrong {
-  background: #f7a964;
-  color: #FFFFFF;
+  color: black;
+  background-color: transparent;
+  border: 2px solid black;
 }
 
 .btn__reset {

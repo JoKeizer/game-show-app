@@ -10,9 +10,9 @@ class Phrase {
     /**
      * Display phrase on game board
      */
-    addPhraseToDisplay() {
-        console.log("addPhraseToDisplay running");
 
+
+    addPhraseToDisplay() {
         const board = document.getElementById('phrase');
         const letters = [...this.phrase];
 

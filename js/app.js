@@ -3,7 +3,9 @@
  * app.js */
 
 
-let game;
+let game = null;
+let phrase = null;
+
 let pressedKeys = [];
 const start = document.getElementById('btn__reset');
 const keyBoardBtns = document.getElementById('qwerty');
@@ -46,30 +48,6 @@ function markButton(event) {
         event.target.disabled = true;
         game.handleInteraction(event);
     }
-
-    // If a key is pressed
-    else if(event.type === 'keypress') {
-        //All letters on keyboard
-        const keysOnBoard = Array.from(document.querySelectorAll('.key'));
-        //if key key is the same disabled key
-        keysOnBoard.forEach(key => {
-            if (event.key === key.innerText) {
-                key.disabled = true;
-            }
-        });
-        //save all pressed keys in an array pressedKeys
-        pressedKeys.push(event.key);
-        const previousKeys = pressedKeys.slice(0, pressedKeys.length - 1);
-
-        //check if player pressed a previousKeys
-        if(previousKeys.indexOf(event.key) > -1) {
-            event.preventDefault();
-            return false;
-        } else {
-            game.handleInteraction(event);
-        }
-    }
-
 }
 
 // When a keyboard button is clicked

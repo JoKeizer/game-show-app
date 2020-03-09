@@ -2,6 +2,13 @@
  * Project 4 - OOP Game App
  * Game.js */
 
+//
+// The handleInteraction method should disable the current letter, but I'm not seeing that here. Inside your if statement, I'm seeing a few issues. First, the adding of "wrong" and "chosen" classes to the key should be happening here. Second, when the letter matches, the "if" part of should call checkForWin, and then depending on what that returns, gameOver should be called here.
+//
+//     So, based on that, the checkForWin should truly just be checking to see if the game has been won, and should return a true or false.
+//
+//     Your removeLife and gameOver methods look good.
+
 class Game {
     constructor() {
         this.missed = 0;
@@ -11,46 +18,41 @@ class Game {
             "vacation",
             "hello world",
             "friends for life"
-        ]
+        ];
         this.activePhrase = '';
-        this.phrase = this.createPhrase();
-
     }
-    
+
 
     /**
      * Selects random phrase from phrases property
      * @return {Object} Phrase object chosen to be used
      */
     getRandomPhrase() {
-        let number = Math.floor(Math.random() * Math.floor(this.phrases.length));
-        return this.phrases[number];
-    }
 
-    /**
-     * Creates phrases for use in game
-     * @return {array} An array of phrases that could be used in the game
-     */
-    
-    createPhrase() {
-        const randomPhrase = this.getRandomPhrase();
-
+        let randomPhrase = Math.floor(Math.random() * Math.floor(this.phrases.length));
+        this.activePhrase = this.phrases[randomPhrase];
         // Create a new instance of the Phrase class
-        return new Phrase(randomPhrase);
+        return this.phrases[randomPhrase];
     }
+
 
     handleInteraction(event) {
-        // Returns true if the letter matches a letter in the phrase
-        const match = this.phrase.checkLetter(event).match;
-        console.log("match", match)
+
+        const match = phrase.checkLetter(event).match;
+        const keysOnBoard = Array.from(document.querySelectorAll('.key'));
+
 
         if (match) {
-            console.log(match, "true")
-            this.phrase.showMatchedLetter(event);
+            phrase.showMatchedLetter(event);
+            //if key key is the same disabled key
+            keysOnBoard.forEach(key => {
+                if (event.key === key.innerText) {
+                    key.disabled = true;
+                }
+            });
             this.checkForWin();
 
         } else {
-            console.log(match, "false")
             this.removeLife();
         }
     }
@@ -59,9 +61,9 @@ class Game {
         //Hide overlay
         document.getElementById("overlay").style.display = "none";
 
-        console.log("running")
-        // Add the random phrase to the board
-        this.phrase.addPhraseToDisplay();
+        this.activePhrase = this.getRandomPhrase();
+        phrase = new Phrase(this.activePhrase);
+        phrase.addPhraseToDisplay();
     }
 
     removeLife() {
@@ -70,14 +72,11 @@ class Game {
 
         // Hide the heart
         const hearts = Array.from(document.querySelectorAll('.tries'));
-        console.log('hearts' ,hearts);
 
         if (hearts.length > 0) {
             hearts[hearts.length - 1].className = 'hidden';
-            console.log('hearts' ,hearts);
         }
 
-        console.log(this.missed, 'missed')
 
         // If the player has 5 missed guesses, call gameOver()
         if (this.missed === 5) {
