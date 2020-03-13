@@ -13,70 +13,50 @@ class Phrase {
 
 
     addPhraseToDisplay() {
-        const board = document.getElementById('phrase');
-        const letters = [...this.phrase];
+        let phrase = document.getElementById('phrase');
+        phrase.removeChild(phrase.firstElementChild);
+        let newUl = document.createElement('ul');
+        phrase.append(newUl);
 
-        letters.forEach(letter => {
-            const li = document.createElement('li');
-
-            if (letter === ' ') {
-                li.className = 'hide space';
-
+        //now print the new phrase
+        for (let i=0; i<this.phrase.length; i++){
+            let li = document.createElement('li');
+            li.textContent = this.phrase[i];
+            if (this.phrase[i]!==" "){
+                li.classList.add('letter');
+                li.classList.add('hide');
             } else {
-                li.className = `hide letter ${letter}`;
-                li.textContent = letter;
+                li.classList.add('space');
             }
-
-            board.firstElementChild.appendChild(li)
-        });
-    }
-
-    checkLetter(event) {
-        let letter;
-        if (event.type === 'click') {
-            letter = event.target.textContent;
-        } else if (event.type === 'keypress') {
-            letter = event.key
-        }
-
-        // Spread the phrase into individual characters
-        const characters = [...this.phrase];
-
-        const indexes = characters.reduce((indexes, char, i) => {
-            if (char === letter) {
-                indexes.push(i);
-            }
-            return indexes;
-        }, []);
-
-        return {
-            match: indexes.length > 0,
-            indexes: indexes
+            let phraseUl = document.querySelector('#phrase ul');
+            phraseUl.appendChild(li);
         }
     }
 
-    showMatchedLetter(event) {
+    checkLetter(keybutton){
+        let letters = document.querySelectorAll('.letter');
+        let result = null;
+        for (let i=0; i<letters.length; i++){
+            if (letters[i].textContent.toUpperCase() == keybutton.toUpperCase()){
+                result = keybutton;
+            }
+        }
 
-        // Matching indexes array from the checkLetter() method
-        const indexes = this.checkLetter(event).indexes;
+        console.log("result",result);
 
-        // An array of the characters from the board
-        const boardChars = Array.from(document.getElementById('phrase').firstElementChild.children);
-
-        // Loops over each character element from the board
-        boardChars.forEach((char, i) => {
-
-            // Loops over the matching indexes array
-            indexes.forEach(index => {
-
-                // If the matching index is the same as the character index, then change the class name to 'show letter'
-                if (index === i) {
-                    char.classList = 'show letter';
-                }
-            });
-        });
+        return result; //return either NULL or LETTER
     }
 
+
+    showMatchedLetter(matchedLetter){
+        let letters = document.querySelectorAll('.letter');
+        for (let i=0; i<letters.length; i++){
+            if (letters[i].textContent.toUpperCase() == matchedLetter.toUpperCase()){
+                letters[i].classList.remove("hide");
+                letters[i].classList.add("show");
+            }
+        }
+    }
 }
 
 

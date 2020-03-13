@@ -3,12 +3,13 @@
  * app.js */
 
 
-let game = null;
+let gameObj;
 let phrase = null;
 
 let pressedKeys = [];
 const start = document.getElementById('btn__reset');
 const keyBoardBtns = document.getElementById('qwerty');
+let qwertyButtons = document.querySelectorAll('#qwerty button');
 
 //reset game
 function resetDisplay() {
@@ -43,18 +44,34 @@ function resetDisplay() {
 }
 
 
-function markButton(event) {
-    if(event.type === 'click') {
-        event.target.disabled = true;
-        game.handleInteraction(event);
+function markButton(e=null, buttonPressed){
+    let returnValue = gameObj.handleInteraction(buttonPressed);
+    if (e!=null){
+        if (returnValue){
+            e.target.classList.add('chosen');
+        } else {
+            e.target.classList.add('wrong');
+        }
+        e.target.setAttribute('disabled','true');
+    } else {
+        for (let i=0; i<qwertyButtons.length; i++){
+            if(qwertyButtons[i].innerHTML == buttonPressed){
+                if (returnValue){
+                    qwertyButtons[i].classList.add('chosen');
+                } else {
+                    qwertyButtons[i].classList.add('wrong');
+                }
+            }
+        }
     }
 }
 
 // When a keyboard button is clicked
-keyBoardBtns.addEventListener('click', function() {
-    // If a button is clicked, call the markButton() function
-    if (event.target.tagName === 'BUTTON') {
-        markButton(event);
+
+keyBoardBtns.addEventListener('click', (e) => {
+    if (e.target.tagName == "BUTTON"){
+        let clickedLetter = e.target.innerHTML;
+        markButton(e, clickedLetter);
     }
 });
 
@@ -70,6 +87,6 @@ document.addEventListener('keypress', function(event) {
 //start Game on button click
 start.addEventListener('click', function() {
     resetDisplay();
-    game = new Game();
-    game.startGame();
+    gameObj = new Game();
+    gameObj.startGame();
 });
